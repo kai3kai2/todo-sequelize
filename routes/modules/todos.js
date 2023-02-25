@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const Todo = require("../../models/todo");
+const db = require("../../models");
+const Todo = db.Todo;
+const User = db.User;
 
 router.get("/new", (req, res) => {
   return res.render("new");
@@ -34,9 +36,11 @@ router.get("/:id/edit", (req, res) => {
 });
 
 router.put("/:id", (req, res) => {
+  const UserId = req.user.id;
   const id = req.params.id;
   const { name, isDone } = req.body;
-  return Todo.findByPk(id)
+
+  return Todo.findOne({ where: { id, UserId } })
     .then((todo) => {
       (todo.name = name), (todo.isDone = isDone === "on");
       return todo.save();
@@ -50,7 +54,8 @@ router.delete("/:id", (req, res) => {
   const id = req.params.id;
 
   return Todo.findOne({ where: { id, UserId } })
-    .then((todo) => todo.destory())
+    .then((todo) => todo.destroy())
+    .then(() => req.flash("success_msg", "刪除成功!"))
     .then(() => res.redirect("/"))
     .catch((error) => console.log(error));
 });

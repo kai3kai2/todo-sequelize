@@ -1,6 +1,10 @@
 <div class="d-flex justify-content-center mt-3">
-{{> message}}
+
 <a href="/todos/new" class="btn btn-primary mb-3">Create</a>
+<div class="d-flex mt-2">
+{{> message}}
+</div>
+
 </div>
 <ul class="list-group mx-5">
   {{#each todos}}
