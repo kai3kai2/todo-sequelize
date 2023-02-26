@@ -6,6 +6,10 @@ const flash = require("connect-flash");
 const routes = require("./routes");
 const usePassport = require("./config/passport");
 
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+
 const app = express();
 const PORT = 3000;
 
@@ -14,7 +18,7 @@ app.set("view engine", "hbs");
 
 app.use(
   session({
-    secret: "ThisIsMySecret",
+    secret: process.env.SESSION_SERECT,
     resave: false,
     saveUninitialized: true,
   })
